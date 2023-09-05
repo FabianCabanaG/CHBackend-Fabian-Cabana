@@ -11,12 +11,11 @@ class ProductManager {
     getProductById = (id) => {
         const checkId = id;
         const productFound = this.products.find(element => element.id === checkId);
-        if (productFound === undefined) {
-            console.log('Producto ya registrado');
+        if (!productFound) {
+            console.log('Producto No registrado');
             return
-        } else {
-            return productFound
         }
+        return productFound
     }
 
     addProduct = (title, description, price, thumbnail, code, stock) => {
@@ -34,8 +33,8 @@ class ProductManager {
             return
         }
         // validar que no se repita el campo code 
-        const productCode = this.products.findIndex(element => element.code === producto.code );
-        console.log(productCode)
+        const productCode = this.products.findIndex(element => element.code === producto.code);
+        // console.log(productCode)
         if (!(productCode === -1)) {
             console.log('Producto ya registrado');
             return
@@ -73,3 +72,4 @@ const prueba = new ProductManager();
 // console.log('3',prueba.getProducts());
 
 // console.log('4',prueba.getProductById(2));
+// console.log(prueba.getProductById(3));
