@@ -1,4 +1,4 @@
-const {ProductManager} = require('./managers/1ProductManager');
+const {ProductManager} = require('./managers/ProductManager');
 
 const manager = new ProductManager('./CHBackend-Fabian Cabana/files/products.json');
 
