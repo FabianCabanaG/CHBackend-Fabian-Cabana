@@ -24,15 +24,15 @@ const env = async () => {
         description:'Este es un producto pruebaaaaaaaaaaaaaaa',
         price:200,
         thumbnail:'Sin imagenaaaaaaaaaa',
-        code:'abc12355aaaaaaa',
+        code:'abc1235512153112',
         stock:25
     };
     
-    // await manager.addProduct(product_prueba);
+    await manager.addProduct(product_prueba_2);
 
     // await manager.updateProduct(1,product_prueba_2)
 
-    await manager.deleteProduct(1);
+    // await manager.deleteProduct(1);
 
     const productss = await manager.getProducts();
     console.log(productss);
