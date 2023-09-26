@@ -1,9 +1,9 @@
 import express from 'express';
 
-import ProductManager from '../managers/ProductManager.js';
+import ProductManager from './ProductManager.js';
 const app = express()
 
-const manager = new ProductManager('../files/products.json');
+const manager = new ProductManager('./products.json');
 
 
 app.get('/products', async (req, res) => {
