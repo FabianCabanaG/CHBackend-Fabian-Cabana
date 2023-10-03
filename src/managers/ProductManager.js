@@ -31,7 +31,7 @@ class ProductManager {
             const productFound = producto_completo.find(element => element.id === checkId);
             if (!productFound) {
                 console.log('Producto No registrado');
-                const objeto_error = {objeto:'no encontrado'}
+                const objeto_error = { objeto: 'no encontrado' }
                 return objeto_error
             }
             return productFound
@@ -54,10 +54,12 @@ class ProductManager {
             // si no se da un objeto como argumento, detener la ejecucion
             if (!objeto) {
                 console.log('se debe dar un objeto para reemplazar')
+                return
             }
 
-            if (!objeto.title || !objeto.description || !objeto.price || !objeto.thumbnail || !objeto.code || !objeto.stock) {
+            if (!objeto.title || !objeto.description || !objeto.price || !objeto.code || !objeto.stock || !objeto.status || !objeto.category) {
                 console.log('Todos los campos del objeto deben existir')
+                return
             }
 
             objeto.id = checkId
@@ -109,6 +111,11 @@ class ProductManager {
                 console.log('Producto ya registrado');
                 return
             }
+            // Campos obligatorios
+            if (!producto.title || !producto.description || !producto.price || !producto.code || !producto.stock || !producto.category) {
+                console.log('Todos los campos obligatorios deben existir')
+                return
+            }
 
             // Continues execution after validation
             if (producto_completo.length === 0) {
@@ -119,7 +126,9 @@ class ProductManager {
                 producto.id = producto_completo[producto_completo.length - 1].id + 1;
             }
 
+            producto.status = true;
 
+            producto.thumbnails = []
 
             producto_completo.push(producto);
 

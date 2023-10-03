@@ -9,15 +9,6 @@
 		"id": 1
 	},
 	{
-		"title": "producto prueba",
-		"description": "Este es un producto prueba",
-		"price": 200,
-		"thumbnail": "Sin imagen",
-		"code": "abc123",
-		"stock": 25,
-		"id": 2
-	},
-	{
 		"title": "producto pruebaaaaaaaaaaaaaaa",
 		"description": "Este es un producto pruebaaaaaaaaaaaaaaa",
 		"price": 200,
@@ -81,12 +72,26 @@
 		"id": 9
 	},
 	{
-		"title": "producto pruebaaaaaaaaaaaaaaa",
-		"description": "Este es un producto pruebaaaaaaaaaaaaaaa",
+		"title": "producto prueba",
+		"description": "Este es un producto prueba",
 		"price": 200,
-		"thumbnail": "Sin imagenaaaaaaaaaa",
-		"code": "abc1235512153112",
+		"thumbnail": "Sin imagen",
+		"code": "abc1236253",
 		"stock": 25,
+		"category": "FARMA",
+		"status": true,
+		"id": 12,
+		"thumbnails": []
+	},
+	{
+		"title": "producto prueba",
+		"description": "Este es un producto pruebaaaa",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"code": "abc1236253321",
+		"stock": 25,
+		"category": "FARMA",
+		"status": "true",
 		"id": 10
 	}
 ]

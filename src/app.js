@@ -1,32 +1,19 @@
 import express from 'express';
 
-import ProductManager from './ProductManager.js';
+import productsRouter from './routes/products.router.js'; 
+import cartsRouter from './routes/carts.router.js';
+
 const app = express()
 
-const manager = new ProductManager('./products.json');
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
 
+app.use('/api/products',productsRouter);
+app.use('/api/carts',cartsRouter);
 
-app.get('/products', async (req, res) => {
-
-    const products = await manager.getProducts();
-    
-
-    const consultas = req.query
-    const {limit} = consultas
-
-    if(!limit) {
-        res.send(products)
-    } else {
-        let limitProducts = products.filter(element => element.id <= limit)
-        res.send(limitProducts)
-    }
-
-});
-
-app.get('/products/:pid', async (req, res) => {
-    const id = Number(req.params.pid);
-    const products = await manager.getProductById(id)
-    res.send(products);
+app.use((err, req, res, next) => {
+    console.log(err.message);
+    res.status(500).send({ error: err.message });
 });
 
 app.listen(8080, () => console.log('listening 8080'));
