@@ -4,9 +4,9 @@ import { __dirname } from '../utils.js';
 
 const manager = new ProductManager(`${__dirname}/data/products.json`);
 
-const router = Router();
+const productsRouter = Router();
 
-router.get('/', async (req, res) => {
+productsRouter.get('/', async (req, res) => {
 
     const products = await manager.getProducts();
 
@@ -23,13 +23,13 @@ router.get('/', async (req, res) => {
 
 });
 
-router.get('/:pid', async (req, res) => {
+productsRouter.get('/:pid', async (req, res) => {
     const id = Number(req.params.pid);
     const products = await manager.getProductById(id)
     res.send(products);
 });
 
-router.post('/', async (req, res) => {
+productsRouter.post('/', async (req, res) => {
 
     const products = await manager.getProducts();
 
@@ -50,7 +50,7 @@ router.post('/', async (req, res) => {
 
 })
 
-router.put('/:pid', async (req, res) => {
+productsRouter.put('/:pid', async (req, res) => {
 
     const products = await manager.getProducts();
 
@@ -75,7 +75,7 @@ router.put('/:pid', async (req, res) => {
 })
 
 
-router.delete('/:pid', async (req, res) => {
+productsRouter.delete('/:pid', async (req, res) => {
 
     const id = Number(req.params.pid);
 
@@ -92,4 +92,34 @@ router.delete('/:pid', async (req, res) => {
     res.send({ status: 'sucess', message: `product ${id} deleted` });
 });
 
-export default router
+// socket io
+
+productsRouter.post('/realTimeProducts', async (req, res) => {
+
+    const products = await manager.getProducts();
+    const io = req.app.get('socketio');
+    const newProduct = req.body;
+    console.log(newProduct)
+
+    if (!newProduct.title || !newProduct.description || !newProduct.price || !newProduct.code || !newProduct.stock || !newProduct.category || !newProduct.status) {
+        return res.status(400).send({ status: 'error', error: 'Incomplete Value' })
+    }
+
+    // const productCode = products.findIndex(element => element.code === newProduct.code);
+    // console.log(productCode)
+    // if (!(productCode === -1)) {
+    //     return res.status(400).send({ status: 'error', error: 'Product already registered' })
+    // }
+
+    await manager.addProduct(newProduct)
+
+    io.emit('allProducts', products);
+
+})
+
+
+export {
+    productsRouter
+    , manager
+}
+

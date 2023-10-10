@@ -1,0 +1,29 @@
+<div>
+    <h1>Listado productos dos</h1>
+    <form action="/api/products/realtimeproducts" method="post" 
+    onsubmit="event.preventDefault();"
+    >
+        <label for="title">title</label>
+        <input type="text" name="title">
+        <label for="description">description </label>
+        <input type="text" name="description">
+        <label for="price">price </label>
+        <input type="" name="price">
+        <label for="code">code </label>
+        <input type="text" name="code">
+        <label for="stock">stock </label>
+        <input type="text" name="stock">
+        <label for="category">category </label>
+        <input type="text" name="category">
+        <label for="status">status </label>
+        <input type="text" name="status">
+        <input type="submit">
+    </form>
+
+    <div id="container">
+
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realTimeProductsScript.js"></script>
