@@ -1,6 +1,7 @@
 import Router from 'express';
 import { __dirname } from '../utils.js';
-import CartManager from "../managers/CartManager.js";
+// import CartManager from "../managers/CartManager.js";
+import CartManager from '../dao/dbManagers/carts.manager.js';
 
 const router = Router();
 
@@ -26,13 +27,36 @@ router.get('/', async (req, res) => {
 
 
 router.post('/', async (req, res) => {
+// input format
+    // {
+    //     "products":
+    //     [
+    //                 {
+    //                     "id": 34,
+    //                     "quantity": 5
+    //                 },
+    //                 {
+    //                     "id": 12,
+    //                     "quantity": 16
+    //                 },
+    //                             {
+    //                     "id": 123,
+    //                     "quantity": 161
+    //                 },
+    //                             {
+    //                     "id": 1002,
+    //                     "quantity": 1611
+    //                 }
+    //     ],
+    //     "id": 5
+    //     }
 
     const carts = await manager.getCarts();
 
     const newCart = req.body;
 
     if (!newCart.products) {
-        return res.status(400).send({ status: 'error', error: 'Incomplete Value' })
+        return res.status(400).send({ status: 'error', error: 'Incomplete Value', payload:req.body })
     }
 
     // const cartfound = carts.find(element => element.id === newCartId);
