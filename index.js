@@ -1,6 +1,6 @@
-const {ProductManager} = require('./managers/ProductManager');
+import ProductManager from  './src/managers/ProductManager.js';
 
-const manager = new ProductManager('./CHBackend-Fabian Cabana/files/products.json');
+const manager = new ProductManager('./CHBackend-Fabian-Cabana/files/products.json');
 
 
 const env = async () => {
