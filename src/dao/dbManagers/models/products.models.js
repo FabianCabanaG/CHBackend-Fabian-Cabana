@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2'
 
 // Especificar nombre de la colección
 
@@ -42,6 +43,8 @@ const productsSchema = new mongoose.Schema({
     },
     id: Number
 });
+
+productsSchema.plugin(mongoosePaginate);
 
 // Parte funcional del modelo, en donde se interactúa con la DB => Consultas, transaciones, escritura, actualización y borrado.
 

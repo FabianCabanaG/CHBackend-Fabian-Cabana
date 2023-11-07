@@ -8,19 +8,24 @@ const manager = new ProductManager(`${__dirname}/data/products.json`);
 const productsRouter = Router();
 
 productsRouter.get('/', async (req, res) => {
-
-    const products = await manager.getProducts();
-
-
     const consultas = req.query
-    const { limit } = consultas
+    let { limit = 10,page = 1,sort,filterName,filterValue} = consultas
+    page = parseInt(page);
+    limit = parseInt(limit)
+    sort = parseInt(sort)
+    console.log(filterName,filterValue)
+    const products = await manager.getProducts(limit,page,sort,filterName,filterValue);
 
-    if (!limit) {
-        res.send(products)
-    } else {
-        let limitProducts = products.filter(element => element.id <= limit)
-        res.send(limitProducts)
-    }
+    let productsC = products.docs.map(product => product.toObject())
+    res.send({status:'success',payload:productsC,totalPages:products.totalPages,
+    prevPage:products.prevPage,
+    nextPage:products.nextPage,
+    page:products.page,
+    hasPrevPage:products.hasPrevPage,
+    hasNextPage:products.hasNextPage,
+    prevLink:`localhost:8080/api/products?page=${products.prevPage}`,
+    nextLink:`localhost:8080/api/products?page=${products.nextPage}`
+    })
 
 });
 
@@ -92,6 +97,17 @@ productsRouter.delete('/:pid', async (req, res) => {
     await manager.deleteProduct(id)
     res.send({ status: 'sucess', message: `product ${id} deleted` });
 });
+
+productsRouter.post('/devinsertmany', async (req, res) => {
+
+    const newProducts = req.body;
+
+    await manager.addManyProducts(newProducts)
+
+    res.send({ status: 'success', payload: newProducts })
+
+})
+
 
 // socket io
 
