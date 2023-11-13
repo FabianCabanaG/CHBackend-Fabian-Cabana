@@ -4,9 +4,12 @@ import handlebars from 'express-handlebars'
 import {productsRouter} from './routes/products.router.js'; 
 import cartsRouter from './routes/carts.router.js';
 import viewsRouter from './routes/views.router.js';
+import sessionsRouter from './routes/sessions.router.js';
 import {Server} from 'socket.io';
 import mongoose from 'mongoose';
 import Chat  from "./dao/dbManagers/chat.manager.js";
+import MongoStore from 'connect-mongo';
+import session from 'express-session';
 
 const chatManager = new Chat();
 
@@ -27,17 +30,6 @@ app.engine('handlebars',handlebars.engine());
 app.set('views',`${__dirname}/views`);
 app.set('view engine','handlebars')
 
-// ROUTERS
-app.use('/api/products',productsRouter);
-app.use('/api/carts',cartsRouter);
-app.use('/',viewsRouter);
-
-
-// ERROR
-app.use((err, req, res, next) => {
-    console.log(err.message);
-    res.status(500).send({ error: err.message });
-});
 
 // Establecer conexión con la DB - MongoAtlas - Mongoose
 const db = 'ecommerce'
@@ -49,6 +41,31 @@ try {
 } catch (error) {
     console.log(error.message);
 }
+
+app.use(session({
+    store: MongoStore.create({
+        client:mongoose.connection.getClient(),
+        ttl: 3600
+    }),
+    secret:'codersecret',
+    resave:true, // Sirve para poder actualizar la sesión después de un tiempo de inactividad
+    saveUninitialized:true, //Sirve para desactivar el almacenamiento de la sesion si el usuario aún no se ha identificado
+}))
+
+
+// ROUTERS
+app.use('/api/products',productsRouter);
+app.use('/api/carts',cartsRouter);
+app.use('/api/sessions',sessionsRouter)
+app.use('/',viewsRouter);
+
+
+// ERROR
+app.use((err, req, res, next) => {
+    console.log(err.message);
+    res.status(500).send({ error: err.message });
+});
+
 
 const server = app.listen(8080, () => console.log('listening 8080'));
 
@@ -75,6 +92,7 @@ io.on('connection', socket => {
 
     })
 });
+
 
 app.set('socketio',io)
 

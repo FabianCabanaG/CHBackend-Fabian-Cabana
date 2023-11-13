@@ -7,7 +7,13 @@ const manager = new ProductManager(`${__dirname}/data/products.json`);
 
 const productsRouter = Router();
 
-productsRouter.get('/', async (req, res) => {
+
+const privateAccess = (req,res,next) => {
+    if(!req.session?.user) return res.redirect('/login');
+    next();
+}
+
+productsRouter.get('/',privateAccess,async (req, res) => {
     const consultas = req.query
     let { limit = 10,page = 1,sort,filterName,filterValue} = consultas
     page = parseInt(page);
@@ -24,7 +30,8 @@ productsRouter.get('/', async (req, res) => {
     hasPrevPage:products.hasPrevPage,
     hasNextPage:products.hasNextPage,
     prevLink:`localhost:8080/api/products?page=${products.prevPage}`,
-    nextLink:`localhost:8080/api/products?page=${products.nextPage}`
+    nextLink:`localhost:8080/api/products?page=${products.nextPage}`,
+    user: req.session.user
     })
 
 });

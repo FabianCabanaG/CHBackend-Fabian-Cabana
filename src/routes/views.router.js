@@ -7,11 +7,22 @@ const cartManager = new Carts();
 
 const router = Router();
 
-router.get('/', async (req,res) => {
+const publicAccess = (req,res,next) => {
+    if(req.session?.user) return res.redirect('/');
+    next();
+};
+
+const privateAccess = (req,res,next) => {
+    if(!req.session?.user) return res.redirect('/login');
+    next();
+}
+
+
+router.get('/',privateAccess, async (req,res) => {
     const products = await manager.getProducts();
     let productsC = products.docs.map(product => product.toObject())
     // console.log({product: products})
-    res.render('index',{product: productsC});
+    res.render('index',{product: productsC,user: req.session.user});
 });
 
 router.get('/carts/:cid', async (req, res) => {
@@ -60,7 +71,7 @@ router.get('/products', async (req,res) => {
         ,nextLink } = fullResponse
 
     // console.log({product: products})
-    res.render('products',{product: fullResponse.payload,hasPrevPage    ,hasNextPage    ,prevLink    ,nextLink ,prevPage, nextPage});
+    res.render('products',{product: fullResponse.payload,hasPrevPage    ,hasNextPage    ,prevLink    ,nextLink ,prevPage, nextPage,user: req.session.user});
 });
 
 // productsRouter.get('/', async (req, res) => {
@@ -99,5 +110,22 @@ router.get('/chat', async (req,res) => {
     // console.log({product: products})
     res.render('chat');
 });
+
+
+router.get('/register',publicAccess, (req,res) => {
+    res.render('register')
+});
+
+router.get('/login',publicAccess, (req,res) => {
+    res.render('login')
+});
+
+router.get('/',privateAccess, (req,res) => {
+    res.render('profile',{
+        user: req.session.user,
+
+    })
+});
+
 
 export default router;
