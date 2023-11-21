@@ -23,8 +23,18 @@ const __dirname = dirname(__filename);
 //     }
 // })
 
+import bcrypt from 'bcrypt';
+
+// Método para hashear contraseña
+
+const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+
+// Método para validar el password
+
+const isValidPassword = (plainPassword,hashedPassword) => bcrypt.compareSync(plainPassword,hashedPassword);
 
 export {
     __dirname,
-    // uploader
+    createHash,
+    isValidPassword
 }

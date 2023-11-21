@@ -10,6 +10,9 @@ import mongoose from 'mongoose';
 import Chat  from "./dao/dbManagers/chat.manager.js";
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
+import { initializePassport } from './config/passport.config.js';
+import passport from 'passport';
+
 
 const chatManager = new Chat();
 
@@ -52,6 +55,11 @@ app.use(session({
     saveUninitialized:true, //Sirve para desactivar el almacenamiento de la sesion si el usuario aún no se ha identificado
 }))
 
+// Passport config
+initializePassport();
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // ROUTERS
 app.use('/api/products',productsRouter);
