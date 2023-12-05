@@ -10,7 +10,7 @@ import mongoose from 'mongoose';
 import Chat  from "./dao/dbManagers/chat.manager.js";
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
-import { initializePassport } from './config/passport.config.js';
+import { initializePassport } from './config/passportsessions.config.js';
 import passport from 'passport';
 
 

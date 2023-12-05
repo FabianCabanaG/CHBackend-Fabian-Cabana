@@ -7,7 +7,17 @@ const usersSchema = new mongoose.Schema({
     last_name: String,
     email: String,
     age: Number,
-    password: String
+    password: String,
+    cart: {
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref:'carts'
+        }        
+    },
+    role:{
+        type: String,
+        default: 'user'
+    }
 });
 
 
