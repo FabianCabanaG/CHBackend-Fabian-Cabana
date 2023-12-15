@@ -44,5 +44,6 @@ const isValidPassword = (plainPassword,hashedPassword) => bcrypt.compareSync(pla
 export {
     __dirname,
     createHash,
-    isValidPassword
+    isValidPassword,
+    generateToken
 }

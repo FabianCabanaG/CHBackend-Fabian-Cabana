@@ -1,149 +1,30 @@
-// import ProductManager from '../managers/ProductManager.js';
-import ProductManager from '../dao/dbManagers/products.manager.js';
-import Router from 'express'
-import { __dirname } from '../utils.js';
+import { __dirname, createHash, generateToken, isValidPassword  } from '../utils.js';
+import Router from './router.js';
+import { accessRolesEnum, passportStrategiesEnum } from '../config/enums.js';
+import {
+    getProductsService
+    ,getProductByIdService
+    ,addProductService
+    ,updateProductService
+    ,deleteProductService
+    ,addManyProductsService
+    ,addProductIOService
+} from '../services/products.service.js'
 
-const manager = new ProductManager(`${__dirname}/data/products.json`);
-
-const productsRouter = Router();
-
-
-const privateAccess = (req,res,next) => {
-    if(!req.session?.user) return res.redirect('/login');
-    next();
-}
-
-productsRouter.get('/',privateAccess,async (req, res) => {
-    const consultas = req.query
-    let { limit = 10,page = 1,sort,filterName,filterValue} = consultas
-    page = parseInt(page);
-    limit = parseInt(limit)
-    sort = parseInt(sort)
-    console.log(filterName,filterValue)
-    const products = await manager.getProducts(limit,page,sort,filterName,filterValue);
-
-    let productsC = products.docs.map(product => product.toObject())
-    res.send({status:'success',payload:productsC,totalPages:products.totalPages,
-    prevPage:products.prevPage,
-    nextPage:products.nextPage,
-    page:products.page,
-    hasPrevPage:products.hasPrevPage,
-    hasNextPage:products.hasNextPage,
-    prevLink:`localhost:8080/api/products?page=${products.prevPage}`,
-    nextLink:`localhost:8080/api/products?page=${products.nextPage}`,
-    user: req.session.user
-    })
-
-});
-
-productsRouter.get('/:pid', async (req, res) => {
-    const id = Number(req.params.pid);
-    const products = await manager.getProductById(id)
-    res.send(products);
-});
-
-productsRouter.post('/', async (req, res) => {
-
-    const products = await manager.getProducts();
-
-    const newProduct = req.body;
-
-    if (!newProduct.title || !newProduct.description || !newProduct.price || !newProduct.code || !newProduct.stock || !newProduct.category || !newProduct.status) {
-        return res.status(400).send({ status: 'error', error: 'Incomplete Value' })
+export default class StudentsRouter extends Router{
+    constructor () {
+        super();
     }
 
-    const productCode = products.findIndex(element => element.code === newProduct.code);
-    // console.log(productCode)
-    if (!(productCode === -1)) {
-        return res.status(400).send({ status: 'error', error: 'Product already registered' })
+    init() {
+        this.get('/',[accessRolesEnum.PUBLIC],passportStrategiesEnum.NOTHING, getProductsService )
+        this.get('/:pid',[accessRolesEnum.PUBLIC],passportStrategiesEnum.NOTHING, getProductByIdService )
+        this.post('/',[accessRolesEnum.PUBLIC],passportStrategiesEnum.NOTHING, addProductService )
+        this.put('/:pid',[accessRolesEnum.PUBLIC],passportStrategiesEnum.NOTHING, updateProductService )
+        this.delete('/:pid',[accessRolesEnum.PUBLIC],passportStrategiesEnum.NOTHING, deleteProductService )
+        this.post('/devinsertmany',[accessRolesEnum.PUBLIC],passportStrategiesEnum.NOTHING, addManyProductsService )
+        this.post('/realTimeProducts',[accessRolesEnum.PUBLIC],passportStrategiesEnum.NOTHING, addProductIOService )
     }
-
-    await manager.addProduct(newProduct)
-    res.send({ status: 'success', payload: newProduct })
-
-})
-
-productsRouter.put('/:pid', async (req, res) => {
-
-    const products = await manager.getProducts();
-
-    const id = Number(req.params.pid);
-
-    const newProduct = req.body;
-
-    // validations
-    // product exists
-    const productFound = products.find(element => element.id === id);
-    if (!productFound) {
-        return res.status(400).send({ status: 'error', error: 'Product does not exist' })
-    }
-    // all fields filled
-    if (!newProduct.title || !newProduct.description || !newProduct.price || !newProduct.code || !newProduct.stock || !newProduct.category || !newProduct.status) {
-        return res.status(400).send({ status: 'error', error: 'Incomplete Value' })
-    }
-
-    await manager.updateProduct(id, newProduct)
-    res.send({ status: 'success', payload: newProduct })
-
-})
-
-
-productsRouter.delete('/:pid', async (req, res) => {
-
-    const id = Number(req.params.pid);
-
-    const products = await manager.getProducts();
-
-    // Validar si el producto existe 
-
-    const productFound = products.find(element => element.id === id);
-    if (!productFound) {
-        return res.status(400).send({ status: 'error', error: 'Product does not exist' })
-    }
-
-    await manager.deleteProduct(id)
-    res.send({ status: 'sucess', message: `product ${id} deleted` });
-});
-
-productsRouter.post('/devinsertmany', async (req, res) => {
-
-    const newProducts = req.body;
-
-    await manager.addManyProducts(newProducts)
-
-    res.send({ status: 'success', payload: newProducts })
-
-})
-
-
-// socket io
-
-productsRouter.post('/realTimeProducts', async (req, res) => {
-
-    const products = await manager.getProducts();
-    const io = req.app.get('socketio');
-    const newProduct = req.body;
-    console.log(newProduct)
-
-    if (!newProduct.title || !newProduct.description || !newProduct.price || !newProduct.code || !newProduct.stock || !newProduct.category || !newProduct.status) {
-        return res.status(400).send({ status: 'error', error: 'Incomplete Value' })
-    }
-
-    // const productCode = products.findIndex(element => element.code === newProduct.code);
-    // console.log(productCode)
-    // if (!(productCode === -1)) {
-    //     return res.status(400).send({ status: 'error', error: 'Product already registered' })
-    // }
-
-    await manager.addProduct(newProduct)
-
-    io.emit('allProducts', products);
-
-})
-
-
-export {
-    productsRouter
-    , manager
+    
 }
 

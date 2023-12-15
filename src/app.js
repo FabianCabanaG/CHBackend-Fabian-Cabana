@@ -1,7 +1,7 @@
 import express from 'express';
 import { __dirname } from './utils.js';
 import handlebars from 'express-handlebars'
-import {productsRouter} from './routes/products.router.js'; 
+import ProductsRouter from './routes/products.router.js'; 
 import cartsRouter from './routes/carts.router.js';
 import viewsRouter from './routes/views.router.js';
 import sessionsRouter from './routes/sessions.router.js';
@@ -12,9 +12,11 @@ import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import { initializePassport } from './config/passportsessions.config.js';
 import passport from 'passport';
-
+import UsersRouter from './routes/users.router.js'
 
 const chatManager = new Chat();
+const usersRouter = new UsersRouter();
+const productsRouter = new ProductsRouter();
 
 
 const app = express()
@@ -62,9 +64,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // ROUTERS
-app.use('/api/products',productsRouter);
+app.use('/api/products',productsRouter.getRouter());
 app.use('/api/carts',cartsRouter);
-app.use('/api/sessions',sessionsRouter)
+app.use('/api/sessions',sessionsRouter);
+app.use('/api/users',usersRouter.getRouter());
 app.use('/',viewsRouter);
 
 
