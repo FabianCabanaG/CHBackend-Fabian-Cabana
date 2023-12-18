@@ -3,6 +3,7 @@
  import GitHubStrategy from 'passport-github2'
  import usersModel from '../dao/dbManagers/models/users.model.js';
  import { createHash,isValidPassword } from '../utils.js';
+ import configs from '../config.js';
 
 //  Local es auth con user y password
  const LocalStrategy = local.Strategy;
@@ -54,11 +55,12 @@
             return done('Incorrect credentials')
         }
     }));
-
+    
+    
     // github strategy 
     passport.use('github', new GitHubStrategy({
-        clientID:'Iv1.45af25d309f2581f',
-        clientSecret:'9b0a30a090227042c2b4a1813739da9fdb3e9f23',
+        clientID:`${configs.githubClientID}`,
+        clientSecret:`${configs.githubClientSecret}`,
         callbackURL:'http://localhost:8080/api/sessions/github-callback',
         scope:['user:email']
     }, async(accesToken, refreshToken, profile, done) => {

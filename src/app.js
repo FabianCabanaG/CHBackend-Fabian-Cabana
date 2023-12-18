@@ -13,6 +13,7 @@ import session from 'express-session';
 import { initializePassport } from './config/passportsessions.config.js';
 import passport from 'passport';
 import UsersRouter from './routes/users.router.js'
+import configs from './config.js';
 
 const chatManager = new Chat();
 const usersRouter = new UsersRouter();
@@ -37,11 +38,9 @@ app.set('view engine','handlebars')
 
 
 // Establecer conexión con la DB - MongoAtlas - Mongoose
-const db = 'ecommerce'
-
 try {
     // Se pasa como parámetro el string de conexión 
-    await mongoose.connect(`mongodb+srv://faccabana11:69ziXnAw9MjZoQOl@codercluster.3z9dyf0.mongodb.net/${db}?retryWrites=true&w=majority`);
+    await mongoose.connect(configs.mongoUrl);
     console.log('DB Conected')
 } catch (error) {
     console.log(error.message);

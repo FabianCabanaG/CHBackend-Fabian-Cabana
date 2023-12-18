@@ -2,36 +2,36 @@ import Router from 'express';
 import { __dirname } from '../utils.js';
 // import CartManager from "../managers/CartManager.js";
 import {
-    getCartService
-    ,addCartService
-    ,getCartByIdService
-    ,updateCartService
-    ,deleteAllProductsFromCartService
-    ,addProductToCartService
-    ,updateCartProductService
-    ,deleteProductFromCart
-    ,addManyCartsService
-} from '../services/carts.service.js'
+    getCartController
+    ,addCartController
+    ,getCartByIdController
+    ,updateCartController
+    ,deleteAllProductsFromCartController
+    ,addProductToCartController
+    ,updateCartProductController
+    ,deleteProductFromCartController
+    ,addManyCartsController
+}from '../controller/carts.controller.js';
  
 const router = Router();
 
-router.get('/', getCartService);
+router.get('/', getCartController);
 
-router.post('/', addCartService)
+router.post('/', addCartController)
 
-router.get('/:cid/',getCartByIdService);
+router.get('/:cid/',getCartByIdController);
 
-router.put('/:cid/', updateCartService);
+router.put('/:cid/', updateCartController);
 
-router.delete('/:cid/', deleteAllProductsFromCartService);
+router.delete('/:cid/', deleteAllProductsFromCartController);
 
-router.post('/:cid/producto/:pid', addProductToCartService);
+router.post('/:cid/producto/:pid', addProductToCartController);
 
-router.put('/:cid/producto/:pid', updateCartProductService);
+router.put('/:cid/producto/:pid', updateCartProductController);
 
-router.delete('/:cid/producto/:pid', deleteProductFromCart);
+router.delete('/:cid/producto/:pid', deleteProductFromCartController);
 
-router.post('/devinsertmany', addManyCartsService)
+router.post('/devinsertmany', addManyCartsController)
 
 
 export default router;
