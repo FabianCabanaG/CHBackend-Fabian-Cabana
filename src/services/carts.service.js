@@ -1,7 +1,13 @@
 import { __dirname } from '../utils.js';
 import CartManager from '../dao/dbManagers/carts.manager.js';
+import productsManager from '../dao/dbManagers/products.manager.js'
+import * as ticketsService from './tickets.service.js'
+
 
 const manager = new CartManager();
+
+const productManager = new productsManager();
+
 
 const getCartService = async (limit) => {
         const carts = await manager.getCarts();
@@ -85,6 +91,33 @@ const addManyCartsService =  async (newProducts) => {
 
 }
 
+const cartPurchaseService = async (cid,user) => {
+    //1. Obtener carrito por id
+    const cart = await manager.getCartById(cid);
+
+    
+    // 2. Iterar el arreglo de productos que tienen 
+    let amount = 0
+    // Arreglo para almacenar los productos no disponibles
+    const outOfStock = []
+    cart.forEach( async ({product,quantity}) => {
+        if(product.stock >= quantity){
+            amount += product.price * quantity;
+            product.stock -= quantity;
+            // 3. Actualizar el stock del producto correspondiente.
+            await productManager.updateProduct(product._id,product);
+        } else {
+            outOfStock.push({product,quantity});
+        }
+    })
+
+    const ticket = await ticketsService.addTicketService(user,amount)
+    // 4. Actualizar el carrito con los productos que no se pudieron comprar.
+    await manager.updateCartProduct(cid,outOfStock);
+
+
+}
+
 export {
      getCartService
     ,addCartService
@@ -95,4 +128,5 @@ export {
     ,updateCartProductService
     ,deleteProductFromCartService
     ,addManyCartsService
+    ,cartPurchaseService
 }

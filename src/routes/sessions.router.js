@@ -19,7 +19,8 @@ router.post('/login', passport.authenticate('login',{failureRedirect:'fail-login
     req.session.user = {
         name: `${req.user.first_name} ${req.user.last_name}`,
         email: req.user.email,
-        age: req.user.age
+        age: req.user.age,
+        role: req.user.role
     }
 
     res.send({status:'success',message:'Authenticated'})

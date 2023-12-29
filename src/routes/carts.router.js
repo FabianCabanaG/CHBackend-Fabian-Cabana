@@ -11,6 +11,7 @@ import {
     ,updateCartProductController
     ,deleteProductFromCartController
     ,addManyCartsController
+    ,cartPurchaseController
 }from '../controller/carts.controller.js';
  
 const router = Router();
@@ -30,6 +31,8 @@ router.post('/:cid/producto/:pid', addProductToCartController);
 router.put('/:cid/producto/:pid', updateCartProductController);
 
 router.delete('/:cid/producto/:pid', deleteProductFromCartController);
+
+router.post('/:cid/purchase', cartPurchaseController);
 
 router.post('/devinsertmany', addManyCartsController)
 

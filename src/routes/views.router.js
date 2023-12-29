@@ -25,14 +25,14 @@ const privateAccess = (req,res,next) => {
 }
 
 
-router.get('/',privateAccess,getProductsViewService );
+router.get('/',privateAccess,loginService );
 router.get('/carts/:cid', getCartByIdViewService);
 router.get('/products',getProductsViewTService );
 router.get('/realTimeProducts',realTimeProductsService );
 router.get('/chat',chatService );
 router.get('/register',publicAccess,registerService );
 router.get('/login',publicAccess,loginService );
-router.get('/',privateAccess, profileService);
+router.get('/current',privateAccess, profileService);
 
 
 export default router;

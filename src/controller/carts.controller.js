@@ -8,6 +8,7 @@ import {
    ,updateCartProductService
    ,deleteProductFromCartService
    ,addManyCartsService
+   ,cartPurchaseService
 } from '../services/carts.service.js'
 
 const getCartController = async (req, res) => {
@@ -46,7 +47,7 @@ const addCartController  = async (req, res) => {
 const getCartByIdController = async (req, res) => {
     try {
         const cart_id = req.params.cid
-        const carts = await manager.getCartByIdService(cart_id);
+        const carts = await getCartByIdService(cart_id);
         res.send({ status: 'success', payload: carts })
 
     } catch (error) {
@@ -142,6 +143,20 @@ const addManyCartsController =  async (req, res) => {
 
 }
 
+const cartPurchaseController = async (req,res) => {
+    try {
+        const {cid} = req.params;
+        console.log(req.session)
+        const { user } = req.session.user;
+
+        const result = await cartPurchaseService(cid,user);
+
+        res.send(result)
+
+    } catch (error) {
+        res.status(500).send({error:error.message})
+    }
+}
 
 export {
     getCartController
@@ -153,4 +168,5 @@ export {
     ,updateCartProductController
     ,deleteProductFromCartController
     ,addManyCartsController
+    ,cartPurchaseController
 }
