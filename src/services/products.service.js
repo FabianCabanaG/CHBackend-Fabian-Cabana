@@ -39,7 +39,8 @@ const usersManager = new Products();
     
         const products = await usersManager.getProducts();
         if (!newProduct.title || !newProduct.description || !newProduct.price || !newProduct.code || !newProduct.stock || !newProduct.category || !newProduct.status) {
-            return res.status(400).send({ status: 'error', error: 'Incomplete Value' })
+            console.log( 'Incomplete Values. Se requiere: title(string),description(string),price(number),code(string),stock(number),category(string),status(boolean)')
+            return res.status(400).send({ status: 'error', error: 'Incomplete Values. Se requiere: title(string),description(string),price(number),code(string),stock(number),category(string),status(boolean)' })
         }
     
         const productCode = products.findIndex(element => element.code === newProduct.code);
