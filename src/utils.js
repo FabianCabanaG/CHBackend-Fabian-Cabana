@@ -6,6 +6,9 @@ import jwt from 'jsonwebtoken';
 import { PRIVATE_KEY_JWT } from './config/constants.js'
 import { faker } from '@faker-js/faker'
 
+// import configs from './config.js';
+
+
 
 const generateUsers = () => {
     return {
@@ -66,5 +69,6 @@ export {
     createHash,
     isValidPassword,
     generateToken,
-    generateUsers
+    generateUsers,
+    // addLogger
 }

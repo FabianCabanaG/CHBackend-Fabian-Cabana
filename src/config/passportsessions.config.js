@@ -3,7 +3,7 @@
  import GitHubStrategy from 'passport-github2'
  import usersModel from '../dao/dbManagers/models/users.model.js';
  import { createHash,isValidPassword } from '../utils.js';
- import configs from '../config.js';
+ import {configs }from '../config.js';
 
 //  Local es auth con user y password
  const LocalStrategy = local.Strategy;

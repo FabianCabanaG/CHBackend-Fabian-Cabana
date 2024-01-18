@@ -13,7 +13,8 @@ import session from 'express-session';
 import { initializePassport } from './config/passportsessions.config.js';
 import passport from 'passport';
 import UsersRouter from './routes/users.router.js'
-import configs from './config.js';
+import {configs }from './config.js';
+import {addLogger}  from './logger.js';
 
 const chatManager = new Chat();
 const usersRouter = new UsersRouter();
@@ -36,6 +37,7 @@ app.engine('handlebars',handlebars.engine());
 app.set('views',`${__dirname}/views`);
 app.set('view engine','handlebars')
 
+app.use(addLogger)
 
 // Establecer conexión con la DB - MongoAtlas - Mongoose
 try {
@@ -69,6 +71,16 @@ app.use('/api/sessions',sessionsRouter);
 app.use('/api/users',usersRouter.getRouter());
 app.use('/',viewsRouter);
 
+app.get('/loggerTest', (req, res) => {
+
+    req.logger.debug('prueba debug');
+    req.logger.http('prueba http');
+    req.logger.info('prueba info');
+    req.logger.warn('prueba warn');
+    req.logger.error('prueba error');
+    req.logger.fatal('prueba fatal'); 
+    res.send({status:'success'})
+})
 
 // ERROR
 app.use((err, req, res, next) => {

@@ -1,0 +1,4 @@
+{"level":"info","message":"GET en /loggerTest - 2024-01-18T04:57:30.110Z"}
+{"level":"debug","message":"prueba debug"}
+{"level":"http","message":"prueba http"}
+{"level":"info","message":"prueba info"}
