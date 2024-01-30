@@ -12,13 +12,14 @@ import {
 } from '../services/carts.service.js'
 
 const getCartController = async (req, res) => {
+    // console.log(req.session.user)
     try {
         const consultas = req.query
         const { limit } = consultas
         // console.log('1',limit)
 
         const carts = await getCartService(limit)
-        console.log(carts)
+        // console.log(carts)
         res.send({ status: 'success', payload:carts })
     } catch (error) {
         res.status(500).send({error:error.message})

@@ -2,6 +2,9 @@
 import { accessRolesEnum, passportStrategiesEnum } from '../config/enums.js';
 import Users from '../dao/dbManagers/users.manager.js';
 import { createHash, generateToken, isValidPassword } from '../utils.js';
+import sendEmail from './mail.service.js'
+import jwt from 'jsonwebtoken';
+import { PRIVATE_KEY_JWT } from '../config/constants.js'
 
 const usersManager = new Users();
 
@@ -59,6 +62,7 @@ const usersManager = new Users();
 
             const accessToken = generateToken(user);
 
+            console.log(req.session.user)
             res.sendSuccess(accessToken);
 
         } catch (error) {
@@ -75,9 +79,47 @@ const usersManager = new Users();
             res.sendServerError(error.message);
         }
     };
+    
+
+    const retrievePassword = async  (email) =>  {
+        const user = await usersManager.getByEmail(email)
+        if(!user) {
+            console.log("user doesn't exists")
+            return
+        }
+        console.log(user)
+        const jwtToken = generateToken(user)
+        console.log(jwtToken)
+
+        const emailToSend = {
+            to:email,
+            subject: 'Recuperación de contraseña',
+            html: `<p> haz click aquí: http://localhost:8080/resetpassword?token=${jwtToken} </p>`
+        }
+
+        sendEmail(emailToSend)
+    };
+    
+    const  resetPassword = async  (token,newPassword) =>  {
+        const user2 = jwt.verify(token,PRIVATE_KEY_JWT)
+        const user = user2.user
+        
+
+        const hashedPassword = createHash(newPassword);
+
+        user.password = hashedPassword;
+
+        const result = await usersManager.updateUser(user._id,user);
+
+        console.log(result)
+    
+    };
+
 
     export {
         registerService
        ,loginService
        ,getAllService
+       ,retrievePassword
+       ,resetPassword
     }

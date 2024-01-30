@@ -9,6 +9,8 @@ import {
    ,registerService
    ,loginService
    ,profileService
+   ,retrievePasswordService
+   ,resetPasswordService
 } from '../services/views.service.js'
 
 import { generateUsers } from "../utils.js";
@@ -45,7 +47,8 @@ router.get('/register',publicAccess,registerService );
 router.get('/login',publicAccess,loginService );
 router.get('/current',privateAccess, profileService);
 router.get('/mocking_products',publicAccess,mockingService)
-
+router.get('/retrievePassword',publicAccess,retrievePasswordService)
+router.get('/resetpassword',publicAccess,resetPasswordService)
 
 
 export default router;

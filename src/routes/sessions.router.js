@@ -15,7 +15,7 @@ router.post('/login', passport.authenticate('login',{failureRedirect:'fail-login
     if(!req.user) {
         res.status(401).send({status:'error',message:'Incorrect credentials'})
     }
-
+    
     req.session.user = {
         name: `${req.user.first_name} ${req.user.last_name}`,
         email: req.user.email,

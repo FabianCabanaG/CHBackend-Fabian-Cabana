@@ -27,7 +27,7 @@ const getProductByIdController = async  (req, res) => {
 };
 
 const addProductController = async  (req, res) =>  {
-    
+    const newProduct = req.body;
     const result = await addProductService(newProduct)
     res.send({ status: 'success', payload: result })
 

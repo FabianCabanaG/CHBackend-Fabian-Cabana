@@ -85,6 +85,15 @@ const loginService = (req,res) => {
     res.render('login')
 };
 
+const retrievePasswordService = (req,res) => {
+    res.render('retrievePassword')
+};
+
+const resetPasswordService = (req,res) => {
+    res.render('resetpassword')
+};
+
+
 const profileService =  (req,res) => {
     console.log(req.session.user)
     res.render('profile',{
@@ -103,4 +112,6 @@ export {
    ,registerService
    ,loginService
    ,profileService
+   ,retrievePasswordService
+   ,resetPasswordService
 };

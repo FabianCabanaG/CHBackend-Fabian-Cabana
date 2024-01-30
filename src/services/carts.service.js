@@ -10,6 +10,7 @@ const productManager = new productsManager();
 
 
 const getCartService = async (limit) => {
+
         const carts = await manager.getCarts();
         // console.log('2',carts)
         if (!limit) {

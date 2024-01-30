@@ -19,7 +19,7 @@ export default class StudentsRouter extends Router{
     init() {
         this.get('/',[accessRolesEnum.PUBLIC],passportStrategiesEnum.NOTHING, getProductsController )
         this.get('/:pid',[accessRolesEnum.PUBLIC],passportStrategiesEnum.NOTHING, getProductByIdController )
-        this.post('/',[accessRolesEnum.ADMIN],passportStrategiesEnum.NOTHING, addProductController )
+        this.post('/',[accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM],passportStrategiesEnum.NOTHING, addProductController )
         this.put('/:pid',[accessRolesEnum.ADMIN],passportStrategiesEnum.NOTHING, updateProductController )
         this.delete('/:pid',[accessRolesEnum.ADMIN],passportStrategiesEnum.NOTHING, deleteProductController )
         this.post('/devinsertmany',[accessRolesEnum.PUBLIC],passportStrategiesEnum.NOTHING, addManyProductsController )

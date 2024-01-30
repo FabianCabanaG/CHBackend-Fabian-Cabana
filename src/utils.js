@@ -29,7 +29,7 @@ const generateUsers = () => {
 
 
 const generateToken = (user) => {
-    const token = jwt.sign({ user }, PRIVATE_KEY_JWT, { expiresIn: '24h' });
+    const token = jwt.sign({ user }, PRIVATE_KEY_JWT, { expiresIn: '1h' });
     return token;
 }
 

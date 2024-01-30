@@ -15,7 +15,9 @@ dotenv.config({path:`${__dirname}/.env`});
 const configs = {
     mongoUrl: process.env.MONGO_DB,
     githubClientID: process.env.GITHUB_CLIENT_ID,
-    githubClientSecret: process.env.GITHUB_CLIENT_SECRET
+    githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
+    gmailUser: process.env.GMAIL_EMAIL,
+    gmailPassword: process.env.GMAIL_APP_PASSWORD
 };
 
 console.log(enviroment)

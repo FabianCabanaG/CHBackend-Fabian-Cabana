@@ -71,7 +71,6 @@ export default class Router{
     handlePolicies = (policies) => (req,res,next) => {
         // ['PUBLIC']
         if(policies[0] === accessRolesEnum.PUBLIC) return next();
-
         const user = req.user;
 
         if(!policies.includes(user.role.toUpperCase()))
