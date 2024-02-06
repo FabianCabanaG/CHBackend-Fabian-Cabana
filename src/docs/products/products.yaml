@@ -1,0 +1,135 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtener todos los productos
+      description: Obtiene todos los productos disponibles.
+      tags:
+        - Products
+      responses:
+        '200':
+          description: Éxito. Devuelve una lista de productos.
+    post:
+      summary: Agregar un nuevo producto
+      description: Agrega un nuevo producto a la base de datos.
+      tags:
+        - Products      
+      responses:
+        '201':
+          description: Producto agregado correctamente.
+  /api/products/{pid}:
+    get:
+      summary: Obtener un producto por ID
+      description: Obtiene un producto por su ID.
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          description: ID del producto a obtener.
+          schema:
+            $type: string
+      responses:
+        '200':
+          description: Éxito. Devuelve el producto solicitado.
+        '404':
+          description: Producto no encontrado.
+    put:
+      summary: Actualizar un producto por ID
+      description: Actualiza un producto existente por su ID.
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          description: ID del producto a actualizar.
+          schema:
+            $type: string
+      responses:
+        '200':
+          description: Producto actualizado correctamente.
+        '404':
+          description: Producto no encontrado.
+    delete:
+      summary: Eliminar un producto por ID
+      description: Elimina un producto existente por su ID.
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          description: ID del producto a eliminar.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Producto eliminado correctamente.
+  /api/products/devinsertmany:
+    post:
+      summary: Agregar varios productos (desarrollo)
+      description: Agrega varios productos a la base de datos para pruebas en entorno de desarrollo.
+      tags:
+        - Products
+      responses:
+        '201':
+          description: Productos agregados correctamente para pruebas en desarrollo.
+  /api/products/realTimeProducts:
+    post:
+      summary: Agregar producto en tiempo real
+      description: Agrega un producto y emite eventos en tiempo real para clientes conectados.
+      tags:
+        - Products
+      responses:
+        '201':
+          description: Producto agregado correctamente y eventos emitidos en tiempo real.
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID único generado por mongodb.
+        title:
+          type: string
+          description: Título del producto.
+        description:
+          type: string
+          description: Descripción del producto.
+        price:
+          type: number
+          description: Precio del producto.
+        code:
+          type: string
+          description: Código único del producto.
+        stock:
+          type: integer
+          description: Stock disponible del producto.
+        category:
+          type: string
+          description: Categoría del producto.
+        thumbnail:
+          type: string
+          description: URL de la imagen en miniatura del producto.
+          default: Sin Imagen
+        status:
+          type: boolean
+          description: Estado del producto (activo o inactivo).
+          default: true
+        id:
+          type: string
+          description: ID único del producto.
+        owner:
+          type: string
+          description: Propietario del producto.
+          default: admin
+      required:
+        - title
+        - description
+        - price
+        - code
+        - stock
+        - category

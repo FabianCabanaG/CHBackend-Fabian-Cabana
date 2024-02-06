@@ -15,6 +15,8 @@ import passport from 'passport';
 import UsersRouter from './routes/users.router.js'
 import {configs }from './config.js';
 import {addLogger}  from './logger.js';
+import swaggerJsdoc from 'swagger-jsdoc'
+import swaggerUiExpress from 'swagger-ui-express'
 
 const chatManager = new Chat();
 const usersRouter = new UsersRouter();
@@ -64,12 +66,30 @@ initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
+// swagger
+const swaggerOptions = {
+    definition:{
+        openapi:'3.0.1',
+        info:{
+            title: 'Documentation Eccomerce Proyect - Coderhouse',
+            description: 'App pensada para un eccomerce'
+        }
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+};
+
+const specs = swaggerJsdoc(swaggerOptions);
+
+
+
 // ROUTERS
 app.use('/api/products',productsRouter.getRouter());
 app.use('/api/carts',cartsRouter);
 app.use('/api/sessions',sessionsRouter);
 app.use('/api/users',usersRouter.getRouter());
 app.use('/',viewsRouter);
+
+app.use('/api/docs',swaggerUiExpress.serve,swaggerUiExpress.setup(specs));
 
 app.get('/loggerTest', (req, res) => {
 
@@ -87,6 +107,9 @@ app.use((err, req, res, next) => {
     console.log(err.message);
     res.status(500).send({ error: err.message });
 });
+
+
+
 
 
 const server = app.listen(8080, () => console.log('listening 8080'));
